@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang='en'>
+<head>
+<meta charset='utf-8'>
+<title>socket</title><link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,700,400&subset=latin,latin-ext' rel='stylesheet' type='text/css'><style type='text/css'>html, body {overflow-x: initial !important;}.CodeMirror { height: auto; }
+.CodeMirror-scroll { overflow-y: hidden; overflow-x: auto; }
+.CodeMirror-lines { padding: 4px 0px; }
+.CodeMirror pre { }
+.CodeMirror-scrollbar-filler, .CodeMirror-gutter-filler { background-color: white; }
+.CodeMirror-gutters { border-right-width: 1px; border-right-style: solid; border-right-color: rgb(221, 221, 221); background-color: rgb(247, 247, 247); white-space: nowrap; }
+.CodeMirror-linenumbers { }
+.CodeMirror-linenumber { padding: 0px 3px 0px 5px; text-align: right; color: rgb(153, 153, 153); }
+.CodeMirror div.CodeMirror-cursor { border-left-width: 1px; border-left-style: solid; border-left-color: black; z-index: 3; }
+.CodeMirror div.CodeMirror-secondarycursor { border-left-width: 1px; border-left-style: solid; border-left-color: silver; }
+.CodeMirror.cm-keymap-fat-cursor div.CodeMirror-cursor { width: auto; border: 0px; background-color: rgb(119, 238, 119); z-index: 1; background-position: initial initial; background-repeat: initial initial; }
+.CodeMirror div.CodeMirror-cursor.CodeMirror-overwrite { }
+.cm-tab { display: inline-block; }
+.cm-s-default .cm-keyword { color: rgb(119, 0, 136); }
+.cm-s-default .cm-atom { color: rgb(34, 17, 153); }
+.cm-s-default .cm-number { color: rgb(17, 102, 68); }
+.cm-s-default .cm-def { color: rgb(0, 0, 255); }
+.cm-s-default .cm-variable { color: black; }
+.cm-s-default .cm-variable-2 { color: rgb(0, 85, 170); }
+.cm-s-default .cm-variable-3 { color: rgb(0, 136, 85); }
+.cm-s-default .cm-property { color: black; }
+.cm-s-default .cm-operator { color: black; }
+.cm-s-default .cm-comment { color: rgb(170, 85, 0); }
+.cm-s-default .cm-string { color: rgb(170, 17, 17); }
+.cm-s-default .cm-string-2 { color: rgb(255, 85, 0); }
+.cm-s-default .cm-meta { color: rgb(85, 85, 85); }
+.cm-s-default .cm-qualifier { color: rgb(85, 85, 85); }
+.cm-s-default .cm-builtin { color: rgb(51, 0, 170); }
+.cm-s-default .cm-bracket { color: rgb(153, 153, 119); }
+.cm-s-default .cm-tag { color: rgb(17, 119, 0); }
+.cm-s-default .cm-attribute { color: rgb(0, 0, 204); }
+.cm-s-default .cm-header { color: blue; }
+.cm-s-default .cm-quote { color: rgb(0, 153, 0); }
+.cm-s-default .cm-hr { color: rgb(153, 153, 153); }
+.cm-s-default .cm-link { color: rgb(0, 0, 204); }
+.cm-negative { color: rgb(221, 68, 68); }
+.cm-positive { color: rgb(34, 153, 34); }
+.cm-header, .cm-strong { font-weight: bold; }
+.cm-del { text-decoration: line-through; }
+.cm-em { font-style: italic; }
+.cm-link { text-decoration: underline; }
+.cm-s-default .cm-error { color: rgb(255, 0, 0); }
+.cm-invalidchar { color: rgb(255, 0, 0); }
+div.CodeMirror span.CodeMirror-matchingbracket { color: rgb(0, 255, 0); }
+div.CodeMirror span.CodeMirror-nonmatchingbracket { color: rgb(255, 34, 34); }
+.CodeMirror-activeline-background { background-color: rgb(232, 242, 255); background-position: initial initial; background-repeat: initial initial; }
+.CodeMirror { position: relative; overflow: hidden; }
+.CodeMirror-scroll { margin-bottom: -30px; margin-right: -30px; padding-bottom: 30px; padding-right: 30px; height: 100%; outline: none; position: relative; box-sizing: content-box; }
+.CodeMirror-sizer { position: relative; }
+.CodeMirror-vscrollbar, .CodeMirror-hscrollbar, .CodeMirror-scrollbar-filler, .CodeMirror-gutter-filler { position: absolute; z-index: 6; display: none; }
+.CodeMirror-vscrollbar { right: 0px; top: 0px; overflow-x: hidden; overflow-y: scroll; }
+.CodeMirror-hscrollbar { bottom: 0px; left: 0px; overflow-y: hidden; overflow-x: scroll; }
+.CodeMirror-scrollbar-filler { right: 0px; bottom: 0px; }
+.CodeMirror-gutter-filler { left: 0px; bottom: 0px; }
+.CodeMirror-gutters { position: absolute; left: 0px; top: 0px; padding-bottom: 30px; z-index: 3; }
+.CodeMirror-gutter { white-space: normal; height: 100%; box-sizing: content-box; padding-bottom: 30px; margin-bottom: -32px; display: inline-block; }
+.CodeMirror-gutter-elt { position: absolute; cursor: default; z-index: 4; }
+.CodeMirror-lines { cursor: text; }
+.CodeMirror pre { border-top-left-radius: 0px; border-top-right-radius: 0px; border-bottom-right-radius: 0px; border-bottom-left-radius: 0px; border-width: 0px; background-color: transparent; font-family: inherit; font-size: inherit; margin: 0px; white-space: pre; word-wrap: normal; color: inherit; z-index: 2; position: relative; overflow: visible; background-position: initial initial; background-repeat: initial initial; }
+.CodeMirror-wrap pre { word-wrap: break-word; white-space: pre-wrap; word-break: normal; }
+.CodeMirror-code pre { border-right-width: 30px; border-right-style: solid; border-right-color: transparent; width: -webkit-fit-content; }
+.CodeMirror-wrap .CodeMirror-code pre { border-right-style: none; width: auto; }
+.CodeMirror-linebackground { position: absolute; left: 0px; right: 0px; top: 0px; bottom: 0px; z-index: 0; }
+.CodeMirror-linewidget { position: relative; z-index: 2; overflow: auto; }
+.CodeMirror-widget { }
+.CodeMirror-wrap .CodeMirror-scroll { overflow-x: hidden; }
+.CodeMirror-measure { position: absolute; width: 100%; height: 0px; overflow: hidden; visibility: hidden; }
+.CodeMirror-measure pre { position: static; }
+.CodeMirror div.CodeMirror-cursor { position: absolute; visibility: hidden; border-right-style: none; width: 0px; }
+.CodeMirror div.CodeMirror-cursor { visibility: hidden; }
+.CodeMirror-focused div.CodeMirror-cursor { visibility: inherit; }
+.CodeMirror-selected { background-color: rgb(217, 217, 217); background-position: initial initial; background-repeat: initial initial; }
+.CodeMirror-focused .CodeMirror-selected { background-color: rgb(215, 212, 240); background-position: initial initial; background-repeat: initial initial; }
+.cm-searching { background-color: rgba(255, 255, 0, 0.4); background-position: initial initial; background-repeat: initial initial; }
+.CodeMirror span { }
+@media print { 
+  .CodeMirror div.CodeMirror-cursor { visibility: hidden; }
+}
+
+
+html { font-size: 14px; }
+body { margin: 0px; padding: 0px; height: auto; bottom: 0px; top: 0px; left: 0px; right: 0px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 1rem; line-height: 1.42857143; color: rgb(51, 51, 51); background-color: rgb(255, 255, 255); overflow-x: hidden; }
+a:active, a:hover { outline: 0px; }
+.in-text-selection, ::selection { background-color: rgb(181, 214, 252); text-shadow: none; background-position: initial initial; background-repeat: initial initial; }
+#write { margin: 0px auto; height: auto; width: inherit; word-break: normal; word-wrap: break-word; position: relative; padding-bottom: 70px; }
+body.typora-export { padding-left: 30px; padding-right: 30px; }
+.typora-export #write { margin: 0px auto; }
+#write > p:first-child, #write > ul:first-child, #write > ol:first-child, #write > pre:first-child, #write > blockquote:first-child, #write > div:first-child, #write > table:first-child { margin-top: 30px; }
+img { max-width: 100%; }
+input, button, select, textarea { color: inherit; font-family: inherit; font-size: inherit; font-style: inherit; font-variant: inherit; font-weight: inherit; line-height: inherit; }
+input[type="checkbox"], input[type="radio"] { line-height: normal; padding: 0px; }
+::before, ::after, * { box-sizing: border-box; }
+#write p, #write h1, #write h2, #write h3, #write h4, #write h5, #write h6, #write div, #write pre { width: inherit; }
+#write p, #write h1, #write h2, #write h3, #write h4, #write h5, #write h6 { position: relative; }
+h1 { font-size: 2rem; }
+p { -webkit-margin-before: 1rem; -webkit-margin-after: 1rem; -webkit-margin-start: 0px; -webkit-margin-end: 0px; }
+.mathjax-block { margin-top: 0px; margin-bottom: 0px; -webkit-margin-before: 0rem; -webkit-margin-after: 0rem; }
+.hidden { display: none; }
+.md-blockmeta { color: rgb(204, 204, 204); font-weight: bold; font-style: italic; }
+a { cursor: pointer; }
+#write input[type="checkbox"] { cursor: pointer; width: inherit; height: inherit; margin: 4px 0px 0px; }
+tr { page-break-inside: avoid; page-break-after: auto; }
+thead { display: table-header-group; }
+table { border-collapse: collapse; border-spacing: 0px; width: 100%; overflow: auto; page-break-inside: auto; }
+table.md-table td { min-width: 80px; }
+.CodeMirror-gutters { border-right-width: 0px; background-color: inherit; }
+.CodeMirror { text-align: left; }
+.CodeMirror-placeholder { opacity: 0.3; }
+.CodeMirror pre { padding: 0px 4px; }
+.CodeMirror-lines { padding: 0px; }
+div.hr:focus { cursor: none; }
+pre { white-space: pre-wrap; }
+.show-fences-line-number pre.md-fences { padding-left: 0px; }
+.CodeMirror-gutters { margin-right: 4px; }
+.md-fences, pre.md-fences { font-size: 0.9rem; display: block; page-break-inside: avoid; text-align: left; overflow: visible; white-space: pre; background-image: inherit; background-size: inherit; background-attachment: inherit; background-origin: inherit; background-clip: inherit; background-color: inherit; position: relative !important; background-position: inherit inherit; background-repeat: inherit inherit; }
+.md-fences .CodeMirror.cm-s-default.CodeMirror-wrap { top: -1.6em; margin-bottom: -1.6em; }
+.md-fences.mock-cm { white-space: pre-wrap; }
+.footnotes { color: rgb(136, 136, 136); font-size: 0.9rem; padding-top: 1em; padding-bottom: 1em; }
+.footnotes + .footnotes { margin-top: -1em; }
+.md-reset { margin: 0px; padding: 0px; border: 0px; outline: 0px; vertical-align: top; background-color: transparent; text-decoration: none; color: rgb(51, 51, 51); font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 1rem; text-shadow: none; float: none; position: static; width: auto; height: auto; white-space: nowrap; cursor: inherit; line-height: normal; font-weight: normal; text-align: left; box-sizing: content-box; direction: ltr; background-position: initial initial; background-repeat: initial initial; }
+li div { padding-top: 0px; }
+blockquote { margin: 1rem 0px; }
+li p, li .mathjax-block { margin: 0.5rem 0px; }
+li { margin: 0px; position: relative; }
+blockquote > :last-child { margin-bottom: 0px; }
+blockquote > :first-child { margin-top: 0px; }
+.footnotes-area { color: rgb(136, 136, 136); margin-top: 0.714rem; padding-bottom: 0.143rem; }
+@media print { 
+  html, body { height: 100%; }
+  .typora-export * { -webkit-print-color-adjust: exact; }
+}
+.footnote-line { margin-top: 0.714em; font-size: 0.7em; }
+a img, img a { cursor: pointer; }
+#write pre.md-meta-block { font-size: 0.8rem; min-height: 2.86rem; white-space: pre-wrap; background-color: rgb(204, 204, 204); display: block; background-position: initial initial; background-repeat: initial initial; }
+p > .md-image:only-child { display: inline-block; width: 100%; text-align: center; }
+#write .MathJax_Display { margin: 0.8em 0px 0px; }
+.mathjax-block { white-space: pre; overflow: hidden; width: 100%; }
+p + .mathjax-block { margin-top: -1.143rem; }
+.mathjax-block:not(:empty)::after { display: none; }
+[contenteditable="true"]:active, [contenteditable="true"]:focus { outline: none; box-shadow: none; }
+.task-list { list-style-type: none; }
+.task-list-item { position: relative; padding-left: 1em; }
+.task-list-item input { position: absolute; top: 0px; left: 0px; }
+.math { font-size: 1rem; }
+.md-toc { min-height: 3.58rem; position: relative; font-size: 0.9rem; border-top-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px; }
+.md-toc-content { position: relative; margin-left: 0px; }
+.md-toc::after, .md-toc-content::after { display: none; }
+.md-toc-item { display: block; color: rgb(65, 131, 196); text-decoration: none; }
+.md-toc-inner:hover { text-decoration: underline; }
+.md-toc-inner { display: inline-block; cursor: pointer; }
+.md-toc-h1 .md-toc-inner { margin-left: 0px; font-weight: bold; }
+.md-toc-h2 .md-toc-inner { margin-left: 2em; }
+.md-toc-h3 .md-toc-inner { margin-left: 4em; }
+.md-toc-h4 .md-toc-inner { margin-left: 6em; }
+.md-toc-h5 .md-toc-inner { margin-left: 8em; }
+.md-toc-h6 .md-toc-inner { margin-left: 10em; }
+.md-toc-h6 { margin-left: 12em; }
+@media screen and (max-width: 48em) { 
+  .md-toc-h3 .md-toc-inner { margin-left: 3.5em; }
+  .md-toc-h4 .md-toc-inner { margin-left: 5em; }
+  .md-toc-h5 .md-toc-inner { margin-left: 6.5em; }
+  .md-toc-h5 .md-toc-inner { margin-left: 8em; }
+  .md-toc-h6 { margin-left: 9.5em; }
+}
+a.md-toc-inner { color: inherit; font-size: inherit; font-style: inherit; font-weight: inherit; text-decoration: inherit; line-height: inherit; }
+.footnote-line a:not(.reversefootnote) { color: inherit; }
+.md-attr { display: none; }
+.md-fn-count::after { content: '.'; }
+.md-tag { opacity: 0.5; }
+code { text-align: left; }
+h1 .md-tag, h2 .md-tag, h3 .md-tag, h4 .md-tag, h5 .md-tag, h6 .md-tag { font-weight: initial; opacity: 0.35; }
+a.md-header-anchor.md-print-anchor { border: none !important; display: inline-block !important; position: absolute !important; width: 1px !important; right: 0px !important; outline: none !important; background-color: transparent !important; text-shadow: initial !important; background-position: initial initial !important; background-repeat: initial initial !important; }
+.md-inline-math .MathJax_SVG .noError { display: none !important; }
+.MathJax_SVG_Display { text-align: center; margin: 1em 0em; position: relative; text-indent: 0px; max-width: none; max-height: none; min-width: 0px; min-height: 0px; width: 100%; display: block !important; }
+.MathJax_SVG .MJX-monospace { font-family: monospace; }
+.MathJax_SVG .MJX-sans-serif { font-family: sans-serif; }
+.MathJax_SVG { display: inline; font-style: normal; font-weight: normal; line-height: normal; font-size: 100%; text-indent: 0px; text-align: left; text-transform: none; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; direction: ltr; max-width: none; max-height: none; min-width: 0px; min-height: 0px; border: 0px; padding: 0px; margin: 0px; }
+.MathJax_SVG * { -webkit-transition: none; transition: none; }
+
+
+@font-face { font-family: 'Open Sans'; font-style: normal; font-weight: normal; src: local(Open Sans Regular), url(file:///Users/RichieSong/Library/Application%20Support/abnerworks.Typora/themes/github/400.woff) format(woff); }
+@font-face { font-family: 'Open Sans'; font-style: italic; font-weight: normal; src: local(Open Sans Italic), url(file:///Users/RichieSong/Library/Application%20Support/abnerworks.Typora/themes/github/400i.woff) format(woff); }
+@font-face { font-family: 'Open Sans'; font-style: normal; font-weight: bold; src: local(Open Sans Bold), url(file:///Users/RichieSong/Library/Application%20Support/abnerworks.Typora/themes/github/700.woff) format(woff); }
+@font-face { font-family: 'Open Sans'; font-style: italic; font-weight: bold; src: local(Open Sans Bold Italic), url(file:///Users/RichieSong/Library/Application%20Support/abnerworks.Typora/themes/github/700i.woff) format(woff); }
+html { font-size: 16px; }
+body { font-family: 'Open Sans', 'Clear Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif; color: rgb(51, 51, 51); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+#write { max-width: 800px; margin: 0px auto; padding: 20px 30px 40px; }
+#write::after { height: 80px; }
+#write > ul:first-child, #write > ol:first-child { margin-top: 30px; }
+body > :first-child { margin-top: 0px !important; }
+body > :last-child { margin-bottom: 0px !important; }
+a { color: rgb(65, 131, 196); }
+h1, h2, h3, h4, h5, h6 { position: relative; margin-top: 1rem; margin-bottom: 1rem; font-weight: bold; line-height: 1.4; -webkit-font-smoothing: antialiased; cursor: text; }
+h1:hover a.anchor, h2:hover a.anchor, h3:hover a.anchor, h4:hover a.anchor, h5:hover a.anchor, h6:hover a.anchor { text-decoration: none; }
+h1 tt, h1 code { font-size: inherit; }
+h2 tt, h2 code { font-size: inherit; }
+h3 tt, h3 code { font-size: inherit; }
+h4 tt, h4 code { font-size: inherit; }
+h5 tt, h5 code { font-size: inherit; }
+h6 tt, h6 code { font-size: inherit; }
+h1 { padding-bottom: 0.3em; font-size: 2.25em; line-height: 1.2; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: rgb(238, 238, 238); }
+h2 { padding-bottom: 0.3em; font-size: 1.75em; line-height: 1.225; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: rgb(238, 238, 238); }
+h3 { font-size: 1.5em; line-height: 1.43; }
+h4 { font-size: 1.25em; }
+h5 { font-size: 1em; }
+h6 { font-size: 1em; color: rgb(119, 119, 119); }
+p, blockquote, ul, ol, dl, table { margin: 0.8em 0px; }
+li > ol, li > ul { margin: 0px; }
+hr { height: 4px; padding: 0px; margin: 16px 0px; background-color: rgb(231, 231, 231); border-width: 0px 0px 1px; border-style: none none solid; overflow: hidden; box-sizing: content-box; border-bottom-color: rgb(221, 221, 221); }
+body > h2:first-child { margin-top: 0px; padding-top: 0px; }
+body > h1:first-child { margin-top: 0px; padding-top: 0px; }
+body > h1:first-child + h2 { margin-top: 0px; padding-top: 0px; }
+body > h3:first-child, body > h4:first-child, body > h5:first-child, body > h6:first-child { margin-top: 0px; padding-top: 0px; }
+a:first-child h1, a:first-child h2, a:first-child h3, a:first-child h4, a:first-child h5, a:first-child h6 { margin-top: 0px; padding-top: 0px; }
+h1 p, h2 p, h3 p, h4 p, h5 p, h6 p { margin-top: 0px; }
+li p.first { display: inline-block; }
+ul, ol { padding-left: 30px; }
+ul:first-child, ol:first-child { margin-top: 0px; }
+ul:last-child, ol:last-child { margin-bottom: 0px; }
+blockquote { border-left-width: 4px; border-left-style: solid; border-left-color: rgb(221, 221, 221); padding: 0px 15px; color: rgb(119, 119, 119); }
+blockquote blockquote { padding-right: 0px; }
+table { padding: 0px; }
+table tr { border-top-width: 1px; border-top-style: solid; border-top-color: rgb(204, 204, 204); background-color: white; margin: 0px; padding: 0px; }
+table tr:nth-child(2n) { background-color: rgb(248, 248, 248); }
+table tr th { font-weight: bold; border: 1px solid rgb(204, 204, 204); text-align: left; margin: 0px; padding: 6px 13px; }
+table tr td { border: 1px solid rgb(204, 204, 204); text-align: left; margin: 0px; padding: 6px 13px; }
+table tr th:first-child, table tr td:first-child { margin-top: 0px; }
+table tr th:last-child, table tr td:last-child { margin-bottom: 0px; }
+.CodeMirror-gutters { border-right-width: 1px; border-right-style: solid; border-right-color: rgb(221, 221, 221); }
+pre.md-fences, .md-fences, code, tt { border: 1px solid rgb(221, 221, 221); background-color: rgb(248, 248, 248); border-top-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px; border-bottom-left-radius: 3px; font-family: Consolas, 'Liberation Mono', Courier, monospace; padding: 2px 4px 0px; font-size: 0.9em; }
+pre.md-fences, .md-fences { margin-bottom: 15px; margin-top: 15px; padding: 8px 1em 6px; }
+.task-list { padding-left: 0px; }
+.task-list-item { padding-left: 32px; }
+.task-list-item input { top: 3px; left: 8px; }
+@media screen and (min-width: 914px) { 
+}
+@media print { 
+  table, pre { page-break-inside: avoid; }
+  pre { word-wrap: break-word; }
+}
+.md-fences { background-color: rgb(248, 248, 248); }
+#write pre.md-meta-block { padding: 1rem; font-size: 85%; line-height: 1.45; background-color: rgb(247, 247, 247); border: 0px; border-top-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px; border-bottom-left-radius: 3px; color: rgb(119, 119, 119); margin-top: 0px !important; }
+.mathjax-block > .code-tooltip { bottom: 0.375rem; }
+#write > h3.md-focus::before { left: -1.5625rem; top: 0.375rem; }
+#write > h4.md-focus::before { left: -1.5625rem; top: 0.285714286rem; }
+#write > h5.md-focus::before { left: -1.5625rem; top: 0.285714286rem; }
+#write > h6.md-focus::before { left: -1.5625rem; top: 0.285714286rem; }
+.md-image > .md-meta { border: 1px solid rgb(221, 221, 221); background-color: rgb(248, 248, 248); border-top-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px; border-bottom-left-radius: 3px; font-family: Consolas, 'Liberation Mono', Courier, monospace; padding: 2px 4px 0px; font-size: 0.9em; color: inherit; }
+.md-tag { color: inherit; }
+.md-toc { margin-top: 20px; padding-bottom: 20px; }
+
+
+</style>
+</head>
+<body class='typora-export' >
+<div  id='write' class = 'is-mac'><p></p><h2><a name='header-c7' class='md-header-anchor '></a>part32 socket并发编程</h2><div class='md-toc' mdtype='toc'><p class="md-toc-content"><span class="md-toc-item md-toc-h2" data-ref="c7"><a class="md-toc-inner" style="" href="#header-c7">part32 socket并发编程</a></span><span class="md-toc-item md-toc-h3" data-ref="c9"><a class="md-toc-inner" style="" href="#header-c9">socket原理</a></span><span class="md-toc-item md-toc-h3" data-ref="c27"><a class="md-toc-inner" style="" href="#header-c27">1. udp vs tcp区别</a></span><span class="md-toc-item md-toc-h3" data-ref="c58"><a class="md-toc-inner" style="" href="#header-c58">2. udp vs tcp 共同点</a></span><span class="md-toc-item md-toc-h3" data-ref="c63"><a class="md-toc-inner" style="" href="#header-c63">3. 模块subprocess使用</a></span><span class="md-toc-item md-toc-h3" data-ref="c77"><a class="md-toc-inner" style="" href="#header-c77">4.黏包现象</a></span><span class="md-toc-item md-toc-h4" data-ref="c101"><a class="md-toc-inner" style="" href="#header-c101">服务器端</a></span><span class="md-toc-item md-toc-h3" data-ref="c117"><a class="md-toc-inner" style="" href="#header-c117">5.IP端口被占用解决措施</a></span><span class="md-toc-item md-toc-h3" data-ref="c134"><a class="md-toc-inner" style="" href="#header-c134">6.TCP工作流程图</a></span><span class="md-toc-item md-toc-h3" data-ref="c137"><a class="md-toc-inner" style="" href="#header-c137">7.网卡的mtu</a></span><span class="md-toc-item md-toc-h3" data-ref="c148"><a class="md-toc-inner" style="" href="#header-c148">8.部分模块使用</a></span><span class="md-toc-item md-toc-h3" data-ref="c156"><a class="md-toc-inner" style="" href="#header-c156">9.socketserver并发</a></span><span class="md-toc-item md-toc-h3" data-ref="c190"><a class="md-toc-inner" style="" href="#header-c190">10.json vs pickle</a></span><span class="md-toc-item md-toc-h3" data-ref="c201"><a class="md-toc-inner" style="" href="#header-c201">11. socketserver源码分析</a></span><span class="md-toc-item md-toc-h3" data-ref="c209"><a class="md-toc-inner" style="" href="#header-c209">12.如何引入socket模块</a></span><span class="md-toc-item md-toc-h3" data-ref="c214"><a class="md-toc-inner" style="" href="#header-c214">13.认证客户端合法性</a></span><span class="md-toc-item md-toc-h3" data-ref="c225"><a class="md-toc-inner" style="" href="#header-c225">14.socket实现ftp</a></span><span class="md-toc-item md-toc-h3" data-ref="c236"><a class="md-toc-inner" style="" href="#header-c236">15.线程Part33</a></span><span class="md-toc-item md-toc-h3" data-ref="c255"><a class="md-toc-inner" style="" href="#header-c255">16.锁</a></span><span class="md-toc-item md-toc-h4" data-ref="c303"><a class="md-toc-inner" style="" href="#header-c303">同步锁</a></span><span class="md-toc-item md-toc-h4" data-ref="c307"><a class="md-toc-inner" style="" href="#header-c307">死锁 递归锁</a></span><span class="md-toc-item md-toc-h4" data-ref="c504"><a class="md-toc-inner" style="" href="#header-c504">同步条件Event对象(同步)</a></span><span class="md-toc-item md-toc-h4" data-ref="c543"><a class="md-toc-inner" style="" href="#header-c543">信号量(同步)</a></span><span class="md-toc-item md-toc-h4" data-ref="c311"><a class="md-toc-inner" style="" href="#header-c311">队列 (<strong>重点掌握</strong>)</a></span><span class="md-toc-item md-toc-h5" data-ref="c321"><a class="md-toc-inner" style="" href="#header-c321">生产者-消费者模型</a></span><span class="md-toc-item md-toc-h4" data-ref="c315"><a class="md-toc-inner" style="" href="#header-c315">栈</a></span><span class="md-toc-item md-toc-h4" data-ref="c327"><a class="md-toc-inner" style="" href="#header-c327">进程</a></span><span class="md-toc-item md-toc-h5" data-ref="c634"><a class="md-toc-inner" style="" href="#header-c634">多进程模块</a></span><span class="md-toc-item md-toc-h4" data-ref="c331"><a class="md-toc-inner" style="" href="#header-c331">并发 vs 并行</a></span><span class="md-toc-item md-toc-h5" data-ref="c335"><a class="md-toc-inner" style="" href="#header-c335">并发：系统具有处理多个任务(动作)的能力</a></span><span class="md-toc-item md-toc-h5" data-ref="c339"><a class="md-toc-inner" style="" href="#header-c339">并行：系统具有<strong>&lt;同时&gt;</strong>处理多个任务的能力，多核cpu同时处理多个任务</a></span><span class="md-toc-item md-toc-h5" data-ref="c345"><a class="md-toc-inner" style="" href="#header-c345">并行是并发的一个子集</a></span><span class="md-toc-item md-toc-h4" data-ref="c354"><a class="md-toc-inner" style="" href="#header-c354">同步 vs 异步</a></span><span class="md-toc-item md-toc-h5" data-ref="c357"><a class="md-toc-inner" style="" href="#header-c357">同步：当进程执行到一个IO(等待外部数据)-----等待</a></span><span class="md-toc-item md-toc-h5" data-ref="c363"><a class="md-toc-inner" style="" href="#header-c363">异步：当进程执行到一个IO(等待外部数据)——不等</a></span><span class="md-toc-item md-toc-h3" data-ref="c374"><a class="md-toc-inner" style="" href="#header-c374">17.GIL</a></span><span class="md-toc-item md-toc-h4" data-ref="c379"><a class="md-toc-inner" style="" href="#header-c379">问题？为什么程序开启了多线程效率反而没提高多少？多核没用上？</a></span><span class="md-toc-item md-toc-h3" data-ref="c426"><a class="md-toc-inner" style="" href="#header-c426">18.python使用场景</a></span><span class="md-toc-item md-toc-h5" data-ref="c430"><a class="md-toc-inner" style="" href="#header-c430">对于IO密集型任务：</a></span><span class="md-toc-item md-toc-h5" data-ref="c434"><a class="md-toc-inner" style="" href="#header-c434">对于计算密集型任务：</a></span></p></div><h3><a name='header-c9' class='md-header-anchor '></a>socket原理</h3><p>应用程序A(用户内存)-&gt;A内核: 发送 data</p><p>​	A内核- &gt;网络：network</p><p>​	网络- &gt;B内核：接收data</p><p>​	B内核-&gt;B程序(用户)</p><p>​	</p><p></p><p><a href='http://www.cnblogs.com/linhaifeng/articles/6129246.html'>老男孩课程笔记</a></p><p><a href='http://www.cnblogs.com/linhaifeng/articles/6129246.html'></a></p><h3><a name='header-c27' class='md-header-anchor '></a>1. udp vs tcp区别</h3><ul><li><p>udp 无连接 </p><ul><li>SOCK_DGRAM</li><li>不可靠传输</li><li>基于数据报文</li></ul></li><li><p>tcp  有连接 ,必须先启动服务器，然后启动客户端去连接服务端</p><ul><li>back_log 半连接池</li><li>SOCK_STREAM</li><li>可靠传输</li><li>基于数据流(btyles)</li></ul></li></ul><h3><a name='header-c58' class='md-header-anchor '></a>2. udp vs tcp 共同点</h3><ul><li>字节(bytes)传输(需要编码)</li></ul><h3><a name='header-c63' class='md-header-anchor '></a>3. 模块subprocess使用</h3><ul><li>Popen(&#39;cmd&#39;,shell=True,stdout=subprocess.PIPE).stdout.read() 通过管道读取，能取一次</li><li>stdout</li><li>stdin</li><li>stderr</li></ul><h3><a name='header-c77' class='md-header-anchor '></a>4.黏包现象</h3><ul><li><p>原因：</p><ul><li>每次发送数据比较小，tcp会通过算法合并数据发送，而另一端无法区别消息边界。</li><li>发送的消息太大，另一端接受的最大消息小于发送消息大小。</li></ul></li><li><p>只有tcp有此现象，udp没有</p></li><li><p>recv(tcp)在自己端的缓冲区为空时，阻塞。recvfrom(udp)在自己端的缓冲区为空时，收一个空值。</p></li><li><p>tcp send和recv 和udp sendfrom和recv不一样，区别是udp每次send数据，都会recv一个完整的send数据，所以说udp是有消息边界的，而tcp不一样，如果传输的数据小，tcp会通过算法合并，而且接受是按照buffersize接受，无法区分消息边界。</p></li><li><p>解决方案：low方案</p></li></ul><h4><a name='header-c101' class='md-header-anchor '></a>服务器端</h4><pre class='md-fences mock-cm' style='display:block;position:relative'>
+#
+__author__ = &#39;Linhaifeng&#39;
+import socket,subprocess
+ip_port=(&#39;127.0.0.1&#39;,8080)
+s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+
+s.bind(ip_port)
+s.listen(5)
+
+while True:
+    conn,addr=s.accept()
+    print(&#39;客户端&#39;,addr)
+    while True:
+        msg=conn.recv(1024)
+        if not msg:break
+        res=subprocess.Popen(msg.decode(&#39;utf-8&#39;),shell=True,\
+                            stdin=subprocess.PIPE,\
+                         stderr=subprocess.PIPE,\
+                         stdout=subprocess.PIPE)
+        err=res.stderr.read()
+        if err:
+            ret=err
+        else:
+            ret=res.stdout.read()
+        data_length=len(ret)
+        conn.send(str(data_length).encode(&#39;utf-8&#39;))
+        data=conn.recv(1024).decode(&#39;utf-8&#39;)
+        if data == &#39;recv_ready&#39;:
+            conn.sendall(ret)
+    conn.close()
+
+```
+
+####客户端
+
+```
+
+    author = &#39;Linhaifeng&#39;
+
+    import socket,time
+
+    s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+
+    res=s.connect_ex((&#39;127.0.0.1&#39;,8080))
+
+    while True:
+
+      msg=input(&#39;&gt;&gt;: &#39;).strip()
+      if len(msg) == 0:continue
+      if msg == &#39;quit&#39;:break
+
+    s.send(msg.encode(&#39;utf-8&#39;))
+    length=int(s.recv(1024).decode(&#39;utf-8&#39;))
+    s.send(&#39;recv_ready&#39;.encode(&#39;utf-8&#39;))
+    send_size=0
+    recv_size=0
+    data=b&#39;&#39;
+    while recv_size &lt; length:
+        data+=s.recv(1024)
+        recv_size=len(data)
+
+
+    print(data.decode(&#39;utf-8&#39;))</pre><ul><li><p>高大上方案：</p><ul><li>struct.pack(&#39;i&#39;,123) 该模块可以把一个类型，如数字，转成固定长度的bytes</li><li><a href='http://www.cnblogs.com/coser/archive/2011/12/17/2291160.html'>struct使用文档</a></li><li><img src='https://images2015.cnblogs.com/blog/1036857/201704/1036857-20170422071900493-2119801952.png' alt='struck使用说明' /></li></ul></li></ul><h3><a name='header-c117' class='md-header-anchor '></a>5.IP端口被占用解决措施</h3><blockquote><p>有的同学在重启服务端时可能会遇到</p><p><img src='https://images2015.cnblogs.com/blog/1036857/201701/1036857-20170101090541757-870871601.png' alt='' /></p><p>这个是由于你的服务端仍然存在四次挥手的time_wait状态在占用地址（如果不懂，请深入研究1.tcp三次握手，四次挥手 2.syn洪水攻击 3.服务器高并发情况下会有大量的time_wait状态的优化方法）</p></blockquote><ul><li><p>方法一：</p><pre class='md-fences mock-cm' style='display:block;position:relative'>#加入一条socket配置，重用ip和端口
+phone=socket(AF_INET,SOCK_STREAM)
+phone.setsockopt(SOL_SOCKET,SO_REUSEADDR,1) #就是它，在bind前加
+phone.bind((&#39;127.0.0.1&#39;,8080))</pre></li><li><p>方法二</p><pre class='md-fences mock-cm' style='display:block;position:relative'>发现系统存在大量TIME_WAIT状态的连接，通过调整linux内核参数解决，
+vi /etc/sysctl.conf
+编辑文件，加入以下内容：
+net.ipv4.tcp_syncookies = 1
+net.ipv4.tcp_tw_reuse = 1
+net.ipv4.tcp_tw_recycle = 1
+net.ipv4.tcp_fin_timeout = 30
+然后执行 /sbin/sysctl -p 让参数生效。
+net.ipv4.tcp_syncookies = 1 表示开启SYN Cookies。当出现SYN等待队列溢出时，启用cookies来处理，可防范少量SYN攻击，默认为0，表示关闭；
+net.ipv4.tcp_tw_reuse = 1 表示开启重用。允许将TIME-WAIT sockets重新用于新的TCP连接，默认为0，表示关闭；
+net.ipv4.tcp_tw_recycle = 1 表示开启TCP连接中TIME-WAIT sockets的快速回收，默认为0，表示关闭。
+net.ipv4.tcp_fin_timeout 修改系統默认的 TIMEOUT 时间</pre></li></ul><h3><a name='header-c134' class='md-header-anchor '></a>6.TCP工作流程图</h3><p><img src='https://images.cnblogs.com/cnblogs_com/goodcandle/socket3.jpg' alt='socket流程图' /></p><h3><a name='header-c137' class='md-header-anchor '></a>7.网卡的mtu</h3><ul><li>一般max 1500Btyles</li><li>分片越多，重组越耗时，网络性能越差</li><li>socket的发送还是接收最好不要超过8k(8096bytes)</li></ul><h3><a name='header-c148' class='md-header-anchor '></a>8.部分模块使用</h3><ul><li>iter(obj,&#39;b&#39;) 迭代obj，只要遇到对象等于b即立刻停止迭代</li><li>re 见 <a href='http://www.cnblogs.com/yuanchenqi/articles/5732581.html'>re博客</a></li></ul><h3><a name='header-c156' class='md-header-anchor '></a>9.socketserver并发</h3><ul><li>基于tcp的套接字，关键就是两个循环，一个链接循环，一个通信循环</li><li>socketserver模块中分两大类：server类（解决链接问题）和request类（解决通信问题）</li></ul><blockquote><p><strong>server类</strong></p></blockquote><p><img src='https://images2015.cnblogs.com/blog/1036857/201705/1036857-20170505014200961-1776184607.png' alt='' /></p><p><a href='https://images2015.cnblogs.com/blog/1036857/201705/1036857-20170505014200961-1776184607.png'></a></p><blockquote><p><strong>request类</strong></p></blockquote><p><img src='https://images2015.cnblogs.com/blog/1036857/201705/1036857-20170505014309914-771361140.png' alt='' /></p><blockquote><p><strong>继承关系</strong></p></blockquote><p><img src='https://images2015.cnblogs.com/blog/1036857/201705/1036857-20170505015158101-334152905.png' alt='' /></p><p><img src='https://images2015.cnblogs.com/blog/1036857/201705/1036857-20170505015247148-219054764.png' alt='' /></p><p><img src='https://images2015.cnblogs.com/blog/1036857/201705/1036857-20170505015356492-1711228984.png' alt='' /></p><p></p><h3><a name='header-c190' class='md-header-anchor '></a>10.json vs pickle</h3><ul><li>json.dumps obj-&gt;str</li><li>pickle.dumps  obj-&gt;btyles</li><li><a href='http://www.cnblogs.com/yuanchenqi/articles/5732581.html'>区别可以见博客</a></li></ul><h3><a name='header-c201' class='md-header-anchor '></a>11. socketserver源码分析</h3><ul><li>TCP  self.request == conn</li><li>UDP self.request == data tuple</li></ul><h3><a name='header-c209' class='md-header-anchor '></a>12.如何引入socket模块</h3><ul><li>from socket import *</li></ul><h3><a name='header-c214' class='md-header-anchor '></a>13.认证客户端合法性</h3><ul><li>链接合法性</li><li>通信合法性</li></ul><blockquote><p>code 见 part31</p></blockquote><h3><a name='header-c225' class='md-header-anchor '></a>14.socket实现ftp</h3><blockquote><p>要求：</p></blockquote><p><img src='https://images2015.cnblogs.com/blog/1036857/201703/1036857-20170303202328563-1390338632.png' alt='ftp要求' /></p><ul><li>代码请参考 part32</li></ul><h3><a name='header-c236' class='md-header-anchor '></a>15.线程Part33</h3><ul><li><p>并发</p></li><li><p>threading.Thread()模块</p></li><li><p>join (位置很重要，防止串行)子线程结束之后才能向下走</p></li><li><p>setDaemon(True) start之前设置，主线程退出之后 子线程也退出</p></li><li><p>threading.active_count() 几个线程活着</p></li><li><p>调用方式：</p><ul><li>继承 重写run方法</li><li>直接调用threading</li></ul></li></ul><h3><a name='header-c255' class='md-header-anchor '></a>16.锁</h3><h4><a name='header-c303' class='md-header-anchor '></a>同步锁</h4><ul><li>lock=threading.Lock() <strong>需要考虑在哪加锁</strong></li><li>lock.acuqire()</li><li>lock.release()</li><li>缺点：锁是串行的</li></ul><h4><a name='header-c307' class='md-header-anchor '></a>死锁 递归锁</h4><ul><li><p>code 见 part34</p></li><li><p>如何解决？</p><ul><li>用threading.Rlock() 原理是内置一个计数器,目的是所有线程都抢这一把锁，通过计数器计算</li></ul></li></ul><h4><a name='header-c504' class='md-header-anchor '></a>同步条件Event对象(同步)</h4><ul><li>e=threading.Event()</li><li>e.wait() 阻塞，一旦被设定，等同于pass</li><li>e.set() 设定</li><li>e.isSet() 默认false</li><li>e.clear() 清除</li></ul><h4><a name='header-c543' class='md-header-anchor '></a>信号量(同步)</h4><ul><li>类似停车位的概念</li><li>锁的一种</li><li>s=threading.Semaphore()</li><li>s.acquire(num) 同时分配多个锁</li><li>s.release()</li></ul><h4><a name='header-c311' class='md-header-anchor '></a>队列 (<strong>重点掌握</strong>)</h4><ul><li>线程安全的,而且是多线程的。相对于列表,list是不安全的</li><li>import queue 线程队列</li><li>q=queue.Queue(num) 先进先出</li><li>q.get(block=False) 默认为True ，如果设置false,则代表如果拿不到数据就报错</li><li>q.put(block=False) 同上 带block=False的put相当于q.nowait()</li><li>queue.LiFoQueue() 先进后出</li><li>queue.PriorityQueue() 设置优先级</li><li>q.qsize() 队列长度</li><li>q.empty() 是否为空</li><li>q.full() 是否满</li></ul><h5><a name='header-c321' class='md-header-anchor '></a>生产者-消费者模型</h5><h4><a name='header-c315' class='md-header-anchor '></a>栈</h4><h4><a name='header-c327' class='md-header-anchor '></a>进程</h4><h5><a name='header-c634' class='md-header-anchor '></a>多进程模块</h5><ul><li><p>multiprocessing.Process()</p></li><li><p>daemon=True</p></li><li><p>调用方式：</p><ul><li>直接调用模块</li><li>继承模块，重写run方法</li></ul></li><li><p>IPC进程间通信机制：</p><ul><li>进程队列Queue</li><li>管道</li><li>Managers：数据共享</li></ul></li></ul><h4><a name='header-c331' class='md-header-anchor '></a>并发 vs 并行</h4><h5><a name='header-c335' class='md-header-anchor '></a>并发：系统具有处理多个任务(动作)的能力</h5><h5><a name='header-c339' class='md-header-anchor '></a>并行：系统具有<strong>&lt;同时&gt;</strong>处理多个任务的能力，多核cpu同时处理多个任务</h5><h5><a name='header-c345' class='md-header-anchor '></a>并行是并发的一个子集</h5><p></p><h4><a name='header-c354' class='md-header-anchor '></a>同步 vs 异步</h4><h5><a name='header-c357' class='md-header-anchor '></a>同步：当进程执行到一个IO(等待外部数据)-----等待</h5><h5><a name='header-c363' class='md-header-anchor '></a>异步：当进程执行到一个IO(等待外部数据)——不等</h5><p></p><h3><a name='header-c374' class='md-header-anchor '></a>17.GIL</h3><h4><a name='header-c379' class='md-header-anchor '></a>问题？为什么程序开启了多线程效率反而没提高多少？多核没用上？</h4><ul><li><p>在解释器里保证线程安全—py创始人考虑</p></li><li><p>因为有了GIL，所以同一时刻只有一个线程被cpu执行</p></li><li><p>线程切换消耗了太多时间</p></li><li><p>提高并发方案：</p><ul><li>利用进程</li><li>多进程+协程</li></ul></li></ul><h3><a name='header-c426' class='md-header-anchor '></a>18.python使用场景</h3><h5><a name='header-c430' class='md-header-anchor '></a>对于IO密集型任务：</h5><ul><li>python多线程是有意义的</li></ul><ul><li>多进程+协程</li></ul><h5><a name='header-c434' class='md-header-anchor '></a>对于计算密集型任务：</h5><ul><li>不推荐python多线程，可以采用多进程+协程</li></ul><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p></div>
+</body>
+</html>
